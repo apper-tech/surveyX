@@ -1,33 +1,50 @@
 import React from 'react';
 import { HashRouter, Route, Switch } from 'react-router-dom';
-import HomeScreen from './components/Home';
+
 import NewSurvey from './components/NewSurvey';
 import OwnerSurveys from './components/OwnerSurveys';
 import Participate from './components/Participate';
+import TestNetCheck from './components/TestNetCheck';
+
 import Dashboard from './_layout/Dashboard';
 const baseName = process.env.PUBLIC_URL + '/';
 
-//const baseName = "/survey-proof-auth";
+var createReactClass = require('create-react-class');
+
+var Wrapper = createReactClass({
+    render: function () {
+        return (
+            <Dashboard>
+                {this.props.children}
+            </Dashboard>
+        );
+    }
+});
+
 export default function Routes(drizzle) {
     return (
         <HashRouter basename={baseName}>
             <Switch>
-                <Route exact path='/' render={() =>
+                {/*   <Route exact path='/' render={() =>
                     (<Dashboard>
                         <HomeScreen />
-                    </Dashboard>)} />
+                    </Dashboard>)} /> */}
+                <Route exact path='/' render={() =>
+                    (<Wrapper>
+                        <TestNetCheck drizzle={drizzle}></TestNetCheck>
+                    </Wrapper>)}></Route>
                 <Route path='/new' render={() =>
-                    (<Dashboard>
+                    (<Wrapper>
                         <NewSurvey drizzle={drizzle} />
-                    </Dashboard>)} />
+                    </Wrapper>)} />
                 <Route path='/mysurveys' render={() =>
-                    (<Dashboard>
+                    (<Wrapper>
                         <OwnerSurveys drizzle={drizzle} />
-                    </Dashboard>)} />
+                    </Wrapper>)} />
                 <Route path='/participate' render={() =>
-                    (<Dashboard>
+                    (<Wrapper>
                         <Participate drizzle={drizzle} />
-                    </Dashboard>)} />
+                    </Wrapper>)} />
             </Switch>
         </HashRouter>
     );
