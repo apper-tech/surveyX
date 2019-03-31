@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -58,7 +59,8 @@ const styles = theme => ({
 
 function TestNetLayout(props) {
     const { classes } = props;
-    const cards  = props.networks;
+    const cards = props.networks;
+    const prefix = '/surveyX/#/';
     return (
         <React.Fragment>
             <CssBaseline />
@@ -67,12 +69,12 @@ function TestNetLayout(props) {
                 <div className={classes.heroUnit}>
                     <div className={classes.heroContent}>
                         <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-                           TestNet Check 
+                            TestNet Check
             </Typography>
                         <Typography variant="h6" align="center" color="textSecondary" paragraph>
-                        You Need to connect your wallet (<b>MetaMask</b>,<b>Mist</b>,<b>Parity</b> or any other) to one of the following networks in order to be able to use this DApp!
-                        <p>  Our DApp is Currently Deployed on the Following Networks:</p>
-            </Typography>
+                            You Need to connect your wallet (<b>MetaMask</b>, <b>Mist</b>, <b>Parity</b> or any other) to one of the following networks in order to be able to use this DApp!
+                        <p>  Our DApp is currently deployed on the following networks:</p>
+                        </Typography>
                     </div>
                 </div>
                 <div className={classNames(classes.layout, classes.cardGrid)}>
@@ -102,10 +104,19 @@ function TestNetLayout(props) {
             <footer className={classes.footer}>
                 <Typography variant="h6" align="center" color="primary" gutterBottom>
                     {props.currentNetwork}
-        </Typography>
+                </Typography>
                 <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
                     you are using this network
         </Typography>
+                <div className={classes.heroButtons}>
+                    <Grid container spacing={16} justify="center">
+                        <Grid item>
+                            <Button variant="contained" color="primary" href={prefix}>
+                                Lets Start
+                  </Button>
+                        </Grid>
+                    </Grid>
+                </div>
             </footer>
             {/* End footer */}
         </React.Fragment>
