@@ -7,9 +7,8 @@ import PlusOneIcon from '@material-ui/icons/PlusOne';
 import PeopleIcon from '@material-ui/icons/People';
 import DoneAllIcon from '@material-ui/icons/DoneAll'
 import Button from '@material-ui/core/Button';
-import { Link } from '@material-ui/core';
 import '../App.css';
-const prefix = '/surveyx/#/';
+const prefix = '/surveyX/#/';
 export const mainListItems = (
   <div>
     <ListSubheader inset>Start Here</ListSubheader>
