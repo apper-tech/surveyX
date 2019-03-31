@@ -193,7 +193,7 @@ class OwnerSurveys extends React.Component {
     }
     OwnerSurveysTable(classes, results) {
         const Timestamp = require('react-timestamp');
-        const prefix = '/survey-proof-auth/#/';
+        const prefix = '/surveyX/#/';
         return (
             <div>
                 <Grid container spacing={40} className={classes.cardGrid}>
@@ -280,7 +280,7 @@ class OwnerSurveys extends React.Component {
                                             <Grid container spacing={8}>
                                                 <Grid item>  Please Share This Link:
                                                     <Typography>
-                                                        <Link href={prefix + "/participate/" + this.state.rows[7]}>{window.location.host + prefix + "/participate/" + this.state.rows[7]}</Link>
+                                                        <Link href={prefix + "participate/" + this.state.rows[7]}>{window.location.host + prefix + "/participate/" + this.state.rows[7]}</Link>
                                                     </Typography>
                                                 </Grid>
                                                 <Grid item>
