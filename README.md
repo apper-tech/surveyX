@@ -2,6 +2,7 @@
 
 
 A Dapp to help you manage authenticity of parties by completing a simple survey, rewarding you with proof of auth and crowd opinions, and a lucky randomly selected participant with a coin reward!
+
 the app can be viewed at its current state at : http://surveyX.io 
 
 future featues and implementaions will be integrated with **Gnosis Ecosystem**
