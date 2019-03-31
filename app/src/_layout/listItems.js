@@ -8,7 +8,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import DoneAllIcon from '@material-ui/icons/DoneAll'
 import { Link } from '@material-ui/core';
 import '../App.css';
-const prefix = '/survey-proof-auth/#/';
+const prefix = '/surveyx/#/';
 export const mainListItems = (
   <div>
     <ListSubheader inset>Start Here</ListSubheader>

@@ -70,8 +70,8 @@ function TestNetLayout(props) {
                            TestNet Check 
             </Typography>
                         <Typography variant="h6" align="center" color="textSecondary" paragraph>
-                           This DApp is Currently in Testing Phase , to be able to use it you need to point your <b>MetaMask</b>
-                           Or <b>Mist3</b> to one of the following TESTNET:
+                        You Need to connect your wallet (<b>MetaMask</b>,<b>Mist</b>,<b>Parity</b> or any other) to one of the following networks in order to be able to use this DApp!
+                        <p>  Our DApp is Currently Deployed on the Following Networks:</p>
             </Typography>
                     </div>
                 </div>
