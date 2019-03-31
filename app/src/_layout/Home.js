@@ -46,7 +46,7 @@ function RenderHome(props) {
           Created By MH Mazen for ApperTech
         </Typography>
         <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          this dapp is a public repo which can be found at <a href="https://github.com/apper-tech/survey-proof-auth">proof of auth survey</a>
+          this dapp is a public repo which can be found at <a href="https://github.com/apper-tech/surveyX">SurveyX</a>
         </Typography>
       </footer>
     </React.Fragment>

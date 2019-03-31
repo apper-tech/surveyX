@@ -13,7 +13,7 @@ You need to pay attention to configure and run Ganache (for a local blockchain) 
 # Deployment
 
 * git clone https://github.com/apper-tech/survey-proof-auth.git
-* cd survey-proof-auth
+* cd surveyX
 * npm install -g truffle
 * npm install -g ganache-cli
 * npm install
@@ -26,7 +26,7 @@ You need to pay attention to configure and run Ganache (for a local blockchain) 
 
 # TODO:
 
-* User participant interface 
+* Add additional features
 * Complete Test case Logic
 
 # Credits:
