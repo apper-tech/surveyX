@@ -64,7 +64,7 @@ Use the following steps to run the DApp in a supported shell:
     
     You might get this page after you launch the app in case of a misconnected network
  
-<img src="https://drive.google.com/uc?id=19Vqf_n6UtsBYcDo7Orw3YmFiKCXCDgWw">
+<img src="https://drive.google.com/uc?id=1ID3fAkCsXAd2vMWPO47LnzXcyHZiQBSy">
 
 - **Participation Page**
     
