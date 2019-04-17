@@ -70,7 +70,7 @@ Use the following steps to run the DApp in a supported shell:
     
     If you are invited to participate in a survey you will see the following screen with appropriate controls to do so  
  
-<img src="https://drive.google.com/uc?id=1uAG1AgYmFDFMargdkR2lZRvdNk0bbgjJ">
+<img src="https://drive.google.com/uc?id=1Zy3bVC7vc1Xh_vHoXHVuRpOUeHEdtM_g">
 
 - **Survey Management Page**
     
