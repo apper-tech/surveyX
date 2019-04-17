@@ -69,10 +69,10 @@ function TestNetLayout(props) {
                 <div className={classes.heroUnit}>
                     <div className={classes.heroContent}>
                         <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-                            TestNet Check
-            </Typography>
+                            Ethereum Network Check
+                        </Typography>
                         <Typography variant="h6" align="center" color="textSecondary" paragraph>
-                            You Need to connect your wallet (<b>MetaMask</b>, <b>Mist</b>, <b>Parity</b> or any other) to one of the following networks in order to be able to use this DApp!
+                            You need to connect your wallet (<b>MetaMask</b>, <b>Mist</b>, <b>Parity</b> or any other) to one of the following networks in order to be able to use this DApp!
                         <p>  Our DApp is currently deployed on the following networks:</p>
                         </Typography>
                     </div>
@@ -102,12 +102,6 @@ function TestNetLayout(props) {
             </main>
             {/* Footer */}
             <footer className={classes.footer}>
-                <Typography variant="h6" align="center" color="primary" gutterBottom>
-                    {props.currentNetwork}
-                </Typography>
-                <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-                    you are using this network
-        </Typography>
                 <div className={classes.heroButtons}>
                     <Grid container spacing={16} justify="center">
                         <Grid item>

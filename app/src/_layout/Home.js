@@ -17,12 +17,11 @@ function RenderHome(props) {
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-              Welcome!*
+              Welcome to SurveyX!
             </Typography>
             <Typography variant="h6" align="center" color="textSecondary" paragraph>
-              this Dapp help you manage authenticity of parites by completing
-              a simple survey, rewarding you with proof of auth and crowd opinions,
-              and a lucky randomly selected participant with a coin reward!
+              Crowd opinion mining and rewarding DApp.
+              For each survey, a randomly selected participant will be rewarded!
             </Typography>
             <div className={classes.heroButtons}>
               <Grid container spacing={16} justify="center">
@@ -42,11 +41,8 @@ function RenderHome(props) {
         </div>
       </main>
       <footer className={classes.footer}>
-        <Typography variant="h6" align="center" gutterBottom>
-          Created By MH Mazen for ApperTech
-        </Typography>
         <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
-          this dapp is a public repo which can be found at <a href="https://github.com/apper-tech/surveyX">SurveyX</a>
+          The code is available at Github: <a href="https://github.com/apper-tech/surveyX">SurveyX</a>
         </Typography>
       </footer>
     </React.Fragment>
