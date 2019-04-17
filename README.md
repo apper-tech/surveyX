@@ -58,7 +58,7 @@ Use the following steps to run the DApp in a supported shell:
     
     You will get this page after you launch the app. It is the landing page:
  
-<img src="https://drive.google.com/uc?id=1fHrGnALzv6BmHPC85VkW9ttDaxrEZeck">
+<img src="https://drive.google.com/uc?id=1MUi4vwmF4gHE3J6GYiz_7Gibgcmta7qA">
 
  - **Test-net Main-net Connectivity Check Page**
     
