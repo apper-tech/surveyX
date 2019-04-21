@@ -39,7 +39,7 @@ const SurveyHandler = {
     CastVote: async function (drizzle, address, code, option) {
         const { Survey } = drizzle.contracts;
         return await new Promise(function (resolve, reject) {
-            Survey.methods.castVote(address, option, code).send()
+            Survey.methods.castVote(option, code).send()
                 .on('receipt', receipt => resolve(receipt));
         });
     },
@@ -55,7 +55,7 @@ const SurveyHandler = {
     CheckSurveyExsistByCode: async function (drizzle, code) {
         const { Survey } = drizzle.contracts;
         return await new Promise(function (resolve, reject) {
-            Survey.methods.getSurveyAddressByCode(code).call().then(function (res) {     
+            Survey.methods.getSurveyAddressByCode(code).call().then(function (res) {
                 if (res.toString() === "0x0000000000000000000000000000000000000000")
                     resolve(false);
                 else

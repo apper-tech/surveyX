@@ -38,7 +38,7 @@ contract Survey {
     require(bytes(_desc).length > 0,"Please add a description");
     surveyCount++;
     string[3] memory options = [option1,option2,option3];
-    surveys[_owner] = SurveyData(surveyCount, _title, _desc,options , block.timestamp,_code, 0);
+    surveys[_owner] = SurveyData(surveyCount, _title, _desc,options ,now,_code, 0);
     surveysIndex[surveyCount] = _owner;
     return true;
   }

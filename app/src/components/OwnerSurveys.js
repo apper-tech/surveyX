@@ -139,7 +139,8 @@ class OwnerSurveys extends React.Component {
     navigateHome(classes) {
         const renderer = ({ hours, minutes, seconds, completed }) => {
             if (completed) {
-                return <Redirect to="/" />
+                this.forceUpdate();
+                return <Redirect to="/mysurveys" />
             } else {
                 return (
                     <Card className={classes.cardError}>
