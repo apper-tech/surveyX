@@ -55,12 +55,14 @@ class ParticipateLayout extends React.Component {
             if (hasSurvey) {
               this.setState({ hasSurvey: true });
               SurveryHandler.GetSurveyByCode(drizzle, code).then((res) => {
+                console.log(res);
+                
                 this.setState({
-                  title: res[1],
-                  description: res[2],
-                  option1: res[3],
-                  option2: res[4],
-                  option3: res[5],
+                  title: res[0],
+                  description: res[1],
+                  option1: res[2],
+                  option2: res[3],
+                  option3: res[4],
                 });
               })
             }
