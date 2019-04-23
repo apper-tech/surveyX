@@ -91,6 +91,7 @@ class OwnerSurveys extends React.Component {
     state = {
         rows: null,
         open: false,
+        loading: true,
         hasSurvey: false,
         timeToRedirect: 5000,
         winner: '',
@@ -101,6 +102,7 @@ class OwnerSurveys extends React.Component {
             SurveryHandler.CheckSurveyExsist(this.props.drizzle,
                 state.drizzleState.accounts[0])
                 .then((hasSurvey) => {
+                    this.setState({ loading: false });
                     if (hasSurvey) {
                         this.setState({ hasSurvey: true });
                         SurveryHandler.GetSurveyList(this.props.drizzle,
@@ -110,6 +112,10 @@ class OwnerSurveys extends React.Component {
                             }).then(() => {
                                 this.forceUpdate();
                             });;
+                    }
+                    else
+                    {
+                        this.forceUpdate();
                     }
                 })
         });
@@ -127,14 +133,19 @@ class OwnerSurveys extends React.Component {
     };
     render() {
         const { classes } = this.props;
-        if (this.state.winnnerFetched) return this.MediaCard(classes)
-        if (!this.state.hasSurvey) return (this.navigateHome(classes))
-        else if (this.state.rows) {
-            return (this.OwnerSurveysTable(classes, this.state.results))
+        if (this.state.hasSurvey) {
+            if (this.state.winnnerFetched) {
+                return this.MediaCard(classes);
+            }
+            if (this.state.rows) {
+                return (this.OwnerSurveysTable(classes, this.state.results));
+            }
         }
-        else {
-            return "loading...";
-        }
+        return (
+            <Typography component="h1" variant="h5">
+              Please Wait ....
+              <Typography color="textSecondary"> {'\t'} Connecting to network</Typography>
+            </Typography>);
     }
     navigateHome(classes) {
         const renderer = ({ hours, minutes, seconds, completed }) => {
@@ -285,7 +296,7 @@ class OwnerSurveys extends React.Component {
                                                     </Typography>
                                                 </Grid>
                                                 <Grid item>
-                                                    <CopyToClipboard text={window.location.host + "/participate?survey=" + this.state.rows[7]}
+                                                    <CopyToClipboard text={prefix + "participate/" + this.state.rows[7]}
                                                         onCopy={() => this.setState({ copied: true })}>
                                                         <Fab color="secondary" aria-label="Edit" className={classes.fab}>
                                                             <FileCopyIcon />

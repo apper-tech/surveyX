@@ -143,7 +143,11 @@ class NewSurvey extends React.Component {
   }
   render() {
     const { classes } = this.props;
-    if (this.state.loading) return "Loading...";
+    if (this.state.loading) return (
+      <Typography component="h1" variant="h5">
+        Please Wait ....
+        <Typography color="textSecondary"> {'\t'} Connecting to network</Typography>
+      </Typography>);
     if (this.state.surveyAdded)
       return (this.navigateHome(classes));
     return (
