@@ -71,7 +71,7 @@ function TestNetLayout(props) {
                         <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
                             Ethereum Network Check
                         </Typography>
-                        <Typography variant="h6" align="center" color="textSecondary" paragraph>
+                        <Typography variant="h6" align="center" color="textSecondary">
                             You need to connect your wallet (<b>MetaMask</b>, <b>Mist</b>, <b>Parity</b> or any other) to one of the following networks in order to be able to use this DApp!
                         <p>  Our DApp is currently deployed on the following networks:</p>
                         </Typography>
