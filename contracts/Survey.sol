@@ -125,6 +125,9 @@ contract Survey {
       address partAddress = participantsIndex[index];
       if(participants[partAddress].surveyAddress == surveyAddress) {
         if(index == rand ) {
+<<<<<<< HEAD
+          delete(surveys[surveyAddress]);
+=======
           surveys[surveyAddress] = SurveyData(-0, "", "",["","",""], 0, "", 0);
           participants[partAddress] = participantData(address(0) ,-0);
           participantsIndex[index] = address(0);
@@ -132,9 +135,16 @@ contract Survey {
           if(surveyCount > 0) {
             surveyCount--;
           }
+>>>>>>> feature-dev
           return partAddress;
         }
       }
     }
+  }
+  function cancelSurveyByCode(string memory _code) public returns(bool) 
+  {
+    address surveyAddress = getSurveyAddressByCode(_code);
+    delete(surveys[surveyAddress]);
+    return true;
   }
 }
