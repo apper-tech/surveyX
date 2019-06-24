@@ -117,10 +117,7 @@ class OwnerSurveys extends React.Component {
                             });
                     }
                     else {
-<<<<<<< HEAD
                         this.setState({ loading: false });
-=======
->>>>>>> feature-dev
                         this.forceUpdate();
                     }
                 })
@@ -143,7 +140,6 @@ class OwnerSurveys extends React.Component {
     };
     render() {
         const { classes } = this.props;
-<<<<<<< HEAD
         if (this.state.loading) {
             return (<div>
                 <Typography component="h1" variant="h5">
@@ -154,14 +150,6 @@ class OwnerSurveys extends React.Component {
                 <br></br>
                 <LinearProgress color="secondary"></LinearProgress>
             </div>);
-=======
-        if (this.state.loading || !this.state.rows) {
-            return (
-                <Typography component="h1" variant="h5">
-                    Please Wait ....
-                  <Typography color="textSecondary"> {'\t'} Connecting to network</Typography>
-                </Typography>);
->>>>>>> feature-dev
         }
         else if (this.state.hasSurvey) {
             if (this.state.winnnerFetched) {
@@ -180,18 +168,11 @@ class OwnerSurveys extends React.Component {
             }
         }
         else {
-<<<<<<< HEAD
-            return (<Typography component="h1" variant="h5">
-                Survey Doesnt Exsist !
-        <Typography color="textSecondary"> {'\t'}Please add one first</Typography>
-            </Typography>);
-=======
             return (
                 <Typography component="h1" variant="h5">
                     No Survey Created!
                       <Typography color="textSecondary"> {'\t'} please create one using the menu</Typography>
                 </Typography>);
->>>>>>> feature-dev
         }
     }
     navigateHome(classes) {
