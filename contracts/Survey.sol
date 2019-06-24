@@ -125,17 +125,7 @@ contract Survey {
       address partAddress = participantsIndex[index];
       if(participants[partAddress].surveyAddress == surveyAddress) {
         if(index == rand ) {
-<<<<<<< HEAD
           delete(surveys[surveyAddress]);
-=======
-          surveys[surveyAddress] = SurveyData(-0, "", "",["","",""], 0, "", 0);
-          participants[partAddress] = participantData(address(0) ,-0);
-          participantsIndex[index] = address(0);
-          surveysIndex[index] = address(0);
-          if(surveyCount > 0) {
-            surveyCount--;
-          }
->>>>>>> feature-dev
           return partAddress;
         }
       }
