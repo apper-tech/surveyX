@@ -113,8 +113,7 @@ class OwnerSurveys extends React.Component {
                                 this.forceUpdate();
                             });;
                     }
-                    else
-                    {
+                    else {
                         this.forceUpdate();
                     }
                 })
@@ -133,7 +132,14 @@ class OwnerSurveys extends React.Component {
     };
     render() {
         const { classes } = this.props;
-        if (this.state.hasSurvey) {
+        if (this.state.loading || !this.state.rows) {
+            return (
+                <Typography component="h1" variant="h5">
+                    Please Wait ....
+                  <Typography color="textSecondary"> {'\t'} Connecting to network</Typography>
+                </Typography>);
+        }
+        else if (this.state.hasSurvey) {
             if (this.state.winnnerFetched) {
                 return this.MediaCard(classes);
             }
@@ -141,11 +147,13 @@ class OwnerSurveys extends React.Component {
                 return (this.OwnerSurveysTable(classes, this.state.results));
             }
         }
-        return (
-            <Typography component="h1" variant="h5">
-              Please Wait ....
-              <Typography color="textSecondary"> {'\t'} Connecting to network</Typography>
-            </Typography>);
+        else {
+            return (
+                <Typography component="h1" variant="h5">
+                    No Survey Created!
+                      <Typography color="textSecondary"> {'\t'} please create one using the menu</Typography>
+                </Typography>);
+        }
     }
     navigateHome(classes) {
         const renderer = ({ hours, minutes, seconds, completed }) => {

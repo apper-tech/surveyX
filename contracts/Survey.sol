@@ -126,6 +126,12 @@ contract Survey {
       if(participants[partAddress].surveyAddress == surveyAddress) {
         if(index == rand ) {
           surveys[surveyAddress] = SurveyData(-0, "", "",["","",""], 0, "", 0);
+          participants[partAddress] = participantData(address(0) ,-0);
+          participantsIndex[index] = address(0);
+          surveysIndex[index] = address(0);
+          if(surveyCount > 0) {
+            surveyCount--;
+          }
           return partAddress;
         }
       }

@@ -47,8 +47,10 @@ const SurveyHandler = {
         const { Survey } = drizzle.contracts;
         let rand = Math.random() * (numOfPart - 1) + 1;
         return await new Promise(function (resolve, reject) {
-            Survey.methods.getSurveyWinnerCode(code, rand).call().then(function (res) {
-                resolve(res);
+            Survey.methods.getSurveyWinnerCode(code, rand).send().then(function () {
+                Survey.methods.getSurveyWinnerCode(code, rand).call().then(function (res) {
+                    resolve(res);
+                })
             });
         });
     },

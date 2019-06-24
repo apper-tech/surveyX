@@ -55,8 +55,7 @@ class ParticipateLayout extends React.Component {
             if (hasSurvey) {
               this.setState({ hasSurvey: true });
               SurveryHandler.GetSurveyByCode(drizzle, code).then((res) => {
-                console.log(res);
-                
+                this.forceUpdate();
                 this.setState({
                   title: res[0],
                   description: res[1],
@@ -68,6 +67,7 @@ class ParticipateLayout extends React.Component {
             }
             else {
               this.setState({ hasSurvey: false });
+              this.forceUpdate();
             }
           })
       });
@@ -168,7 +168,8 @@ class ParticipateLayout extends React.Component {
     </main>)
   }
   handleSendCode() {
-    window.location.href = "participate?survey='" + this.state.code + "'";
+    this.forceUpdate();
+    window.location.href = window.location.href + "/" + this.state.code;
   }
 
   handleChange = event => {
@@ -177,8 +178,13 @@ class ParticipateLayout extends React.Component {
   }
   render() {
     const { classes } = this.props;
-    if (!this.props.code) return this.renderCodeRequest(classes);
-    else if (!this.state.hasSurvey) return "Code Doent Exsist!";
+    if (!this.props.code || this.props.code === 'participate') return this.renderCodeRequest(classes);
+    else if (!this.state.hasSurvey)
+      return (
+        <Typography component="h1" variant="h5">
+          Code Dosent Exsist!
+            <Typography color="textSecondary"> {'\t'} please check the code and try again</Typography>
+        </Typography>);
     else if (this.state.voted) return this.navigateHome(classes);
     return (<div>
 
