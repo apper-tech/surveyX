@@ -36,6 +36,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import CardActionArea from '@material-ui/core/CardActionArea';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const styles = theme => ({
     root: {
@@ -93,7 +94,10 @@ class OwnerSurveys extends React.Component {
         open: false,
         loading: true,
         hasSurvey: false,
+        hasData: false,
         timeToRedirect: 5000,
+        connecting: false,
+        surveryCanceled: false,
         winner: '',
         winnnerFetched: false
     }
@@ -102,18 +106,18 @@ class OwnerSurveys extends React.Component {
             SurveryHandler.CheckSurveyExsist(this.props.drizzle,
                 state.drizzleState.accounts[0])
                 .then((hasSurvey) => {
-                    this.setState({ loading: false });
                     if (hasSurvey) {
                         this.setState({ hasSurvey: true });
                         SurveryHandler.GetSurveyList(this.props.drizzle,
                             state.drizzleState.accounts[0])
                             .then((data) => {
-                                this.setState({ rows: data });
+                                this.setState({ rows: data, hasData: true, loading: false });
                             }).then(() => {
                                 this.forceUpdate();
-                            });;
+                            });
                     }
                     else {
+                        this.setState({ loading: false });
                         this.forceUpdate();
                     }
                 })
@@ -122,6 +126,10 @@ class OwnerSurveys extends React.Component {
     createData(creationDate, numOfUsers) {
         id += 1;
         return { id, creationDate, numOfUsers };
+    }
+    checkParticipantsCount(rows) {
+        const count = rows[9] + rows[10] + rows[11];
+        return count == 0;
     }
     handleClickOpen = () => {
         this.setState({ open: true });
@@ -132,18 +140,30 @@ class OwnerSurveys extends React.Component {
     };
     render() {
         const { classes } = this.props;
-        if (this.state.loading || !this.state.rows) {
-            return (
+        if (this.state.loading) {
+            return (<div>
                 <Typography component="h1" variant="h5">
+
                     Please Wait ....
                   <Typography color="textSecondary"> {'\t'} Connecting to network</Typography>
-                </Typography>);
+                </Typography>
+                <br></br>
+                <LinearProgress color="secondary"></LinearProgress>
+            </div>);
         }
         else if (this.state.hasSurvey) {
             if (this.state.winnnerFetched) {
-                return this.MediaCard(classes);
+                return this.WinnerCard(classes);
             }
-            if (this.state.rows) {
+            else if (this.state.surveryCanceled)
+                return (
+                    <Typography component="h1" variant="h5">
+                        Survey canceled
+             <Typography color="textSecondary">
+                            {'\t'} You Can create a new one now !</Typography>
+                    </Typography>
+                );
+            else if (this.state.hasData) {
                 return (this.OwnerSurveysTable(classes, this.state.results));
             }
         }
@@ -211,9 +231,18 @@ class OwnerSurveys extends React.Component {
                 });
         }
     }
+    handleCancel(code) {
+        this.setState({ connecting: true });
+
+        SurveryHandler.CancelSurveyByCode(this.props.drizzle, code)
+            .then((canceled) => {
+                this.setState({ connecting: false, surveryCanceled: true });
+            })
+
+    }
     OwnerSurveysTable(classes, results) {
         const Timestamp = require('react-timestamp');
-        const prefix = '/surveyX/#/';
+        const surveyLink = '/surveyX/#/' + "participate/" + this.state.rows[7];
         return (
             <div>
                 <Grid container spacing={40} className={classes.cardGrid}>
@@ -236,9 +265,21 @@ class OwnerSurveys extends React.Component {
                                         fullWidth
                                         variant="contained"
                                         color="primary"
+                                        disabled={this.checkParticipantsCount(this.state.rows)}
                                         className={classes.submit}
-                                        onClick={() => this.handleDone(this.state.rows[8], this.state.rows[7])}
-                                    >End Survey</Button>
+                                        onClick={() => this.handleDone(this.state.rows[8], this.state.rows[7])}>
+                                        End Survey
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="contained"
+                                        color="secondary"
+                                        className={classes.submit}
+                                        onClick={() => this.handleCancel(this.state.rows[7])}>
+                                        Cancel Survey
+                                    </Button>
+
                                 </CardActions>
                             </div>
                             <CardMedia
@@ -247,6 +288,8 @@ class OwnerSurveys extends React.Component {
                             />
 
                         </Card>
+                        <br></br>
+                        <LinearProgress hidden={!this.state.connecting}></LinearProgress>
                     </Grid>
                     <Grid item xs={12} md={12}>
                         <Paper>
@@ -300,11 +343,11 @@ class OwnerSurveys extends React.Component {
                                             <Grid container spacing={8}>
                                                 <Grid item>  Please Share This Link:
                                                     <Typography>
-                                                        <Link href={prefix + "participate/" + this.state.rows[7]}>{window.location.host + prefix + "/participate/" + this.state.rows[7]}</Link>
+                                                        <Link href={surveyLink}>{this.state.rows[7]}</Link>
                                                     </Typography>
                                                 </Grid>
                                                 <Grid item>
-                                                    <CopyToClipboard text={prefix + "participate/" + this.state.rows[7]}
+                                                    <CopyToClipboard text={surveyLink}
                                                         onCopy={() => this.setState({ copied: true })}>
                                                         <Fab color="secondary" aria-label="Edit" className={classes.fab}>
                                                             <FileCopyIcon />
@@ -332,7 +375,7 @@ class OwnerSurveys extends React.Component {
                 </Paper></div>
         );
     }
-    MediaCard(classes) {
+    WinnerCard(classes) {
         return (
             <Card className={classes.card}>
                 <CardActionArea>
@@ -358,6 +401,7 @@ class OwnerSurveys extends React.Component {
             </Card>
         );
     }
+
 }
 
 

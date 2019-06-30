@@ -11,7 +11,7 @@
     "scripts": {
         "compile": "truffle compile",
         "migrate": "truffle migrate ",
-        "m-rinkeby": "truffle migrate --network rinkeby --verbose-rpc --interactive --reset",
+        "m-rinkeby": "truffle migrate -f 2 --network rinkeby --verbose-rpc --interactive --reset",
         "m-ropsten": "truffle migrate -f 2 --network ropsten"
     }
 }

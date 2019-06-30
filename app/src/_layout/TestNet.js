@@ -73,7 +73,9 @@ function TestNetLayout(props) {
                         </Typography>
                         <Typography variant="h6" align="center" color="textSecondary">
                             You need to connect your wallet (<b>MetaMask</b>, <b>Mist</b>, <b>Parity</b> or any other) to one of the following networks in order to be able to use this DApp!
-                        <p>  Our DApp is currently deployed on the following networks:</p>
+                            </Typography>
+                        <Typography variant="h6" align="center" paragraph>
+                          Our DApp is currently deployed on the following networks:
                         </Typography>
                     </div>
                 </div>

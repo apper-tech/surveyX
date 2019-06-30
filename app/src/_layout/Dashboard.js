@@ -42,6 +42,7 @@ class Dashboard extends React.Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
+      
         <AppBar
           position="absolute"
           className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
@@ -73,6 +74,7 @@ class Dashboard extends React.Component {
             </Link>
           </Toolbar>
         </AppBar>
+        
         <Drawer
           variant="permanent"
           classes={{
@@ -89,6 +91,7 @@ class Dashboard extends React.Component {
           <Divider />
           <List>{mainListItems}</List>
         </Drawer>
+        
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           {this.props.children}

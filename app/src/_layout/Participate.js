@@ -27,6 +27,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { ParticipateLayoutStyles } from '../_layout/Styles';
 
 class ParticipateLayout extends React.Component {
@@ -42,6 +43,8 @@ class ParticipateLayout extends React.Component {
     loading: true, drizzleState: null,
     hasSurvey: false,
     voted: false,
+    voting: false,
+    requestCall: true,
     timeToRedirect: 10000,
     code: ''
   }
@@ -52,6 +55,7 @@ class ParticipateLayout extends React.Component {
         this.setState(state);
         SurveryHandler.CheckSurveyExsistByCode(drizzle, code)
           .then((hasSurvey) => {
+            this.setState({ requestCall: false })
             if (hasSurvey) {
               this.setState({ hasSurvey: true });
               SurveryHandler.GetSurveyByCode(drizzle, code).then((res) => {
@@ -92,9 +96,10 @@ class ParticipateLayout extends React.Component {
   handleVote() {
     const { drizzle, code } = this.props;
     const { drizzleState, selected } = this.state;
+    this.setState({ voting: true })
     SurveryHandler.CastVote(drizzle, drizzleState.accounts[0], code, selected).then((res) => {
       if (res) {
-        this.setState({ voted: true });
+        this.setState({ voted: true, voting: false });
         this.forceUpdate();
       }
     })
@@ -168,8 +173,11 @@ class ParticipateLayout extends React.Component {
     </main>)
   }
   handleSendCode() {
-    this.forceUpdate();
-    window.location.href = window.location.href + "/" + this.state.code;
+    //http://localhost:3000/surveyX/#/participate/yjdnl782
+    const url = window.location.href = window.location.href + '/' + this.state.code;
+    console.log(url);
+    window.location.href = window.location.href + '/' + this.state.code;
+    window.location.reload(true);
   }
 
   handleChange = event => {
@@ -177,14 +185,24 @@ class ParticipateLayout extends React.Component {
     this.setState({ code: control.value });
   }
   render() {
-    const { classes } = this.props;
-    if (!this.props.code || this.props.code === 'participate') return this.renderCodeRequest(classes);
-    else if (!this.state.hasSurvey)
-      return (
-        <Typography component="h1" variant="h5">
-          Code Dosent Exsist!
-            <Typography color="textSecondary"> {'\t'} please check the code and try again</Typography>
-        </Typography>);
+    const { classes, code } = this.props;
+    console.log('code' + code);
+
+    if (!code) return this.renderCodeRequest(classes);
+    else if (this.state.requestCall) return (<div>
+      <Typography component="h1" variant="h5">
+
+        Please Wait ....
+        <Typography color="textSecondary"> {'\t'} Connecting to network</Typography>
+      </Typography>
+      <br></br>
+      <LinearProgress color="secondary"></LinearProgress>
+    </div>);
+    else if (!this.state.hasSurvey) return (<Typography component="h1" variant="h5">
+
+      Code Doesn't Exist !
+    <Typography color="textSecondary"> {'\t'} Check the code and try again</Typography>
+    </Typography>);
     else if (this.state.voted) return this.navigateHome(classes);
     return (<div>
 
@@ -231,7 +249,9 @@ class ParticipateLayout extends React.Component {
             </Fab>
             </ListItem>
           </List>
+
         </Paper>
+        <LinearProgress hidden={!this.state.voting}></LinearProgress>
       </main> {this.headerRender(classes)}</div>
     );
   }

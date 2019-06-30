@@ -7,7 +7,8 @@ class ParticipateScreen extends React.Component {
 
   render() {
     let params = window.location.href.substr(window.location.href.lastIndexOf('/') + 1);
-    
+    if (params == 'participate')
+      params = '';
     return <ParticipateLayout code={params} drizzle={this.props.drizzle} ></ParticipateLayout>
   }
 }

@@ -74,6 +74,13 @@ const SurveyHandler = {
                 });
             });
         });
+    },
+    CancelSurveyByCode: async function (drizzle, code) {
+        const { Survey } = drizzle.contracts;
+        return await new Promise(function (resolve, reject) {
+            Survey.methods.cancelSurveyByCode(code).send()
+                .on('receipt', receipt => resolve(receipt));
+        });
     }
 };
 
