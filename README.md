@@ -4,7 +4,7 @@ This DApp allows for any survey. The main usage is to facilitate crowd opinion m
 
 You can always check the latest implemented features at http://surveyX.io 
 
-The DApp will be soon reimplemented with **Gnosis Apollo**
+The DApp will be soon reimplemented with **Gnosis Mercury**
 
 ## Usage
 Encouraging the crowd to participate in surveys is a tough task. And having the data not filled with bad quality and irresponsible answers could be tougher. We believe that rewards can be a good solution and a lottery-like DApp can encourage users to fill clean and clear data.
@@ -93,11 +93,10 @@ Use the following steps to run the DApp in a supported shell:
 <img src="https://drive.google.com/uc?id=1BwUuMZwwDlu7Dpt7XrrftaQQ_EEVuDYz">
 
 # Future Work
-- Reimplement with Gnosis Apollo.
+- Reimplement with Gnosis Mercury.
 - Enable dynamic survey options.
-- Enable the Surveyor to define the winner selection algorithm, by specifying an equation and its parameters (fairly complex logic has to be implemented here).
-- Design and implement a business model (the business model specify how we will generate profit
-s).
+- Enable the Surveyor to define the winner selection algorithm, by specifying an equation and its parameters (fairly complex logic may be implemented here with the help of an Oracle, or even without).
+- Design and implement a business model (the business model specifies the revenue stream).
 - Use NonRepudiationX as an off-chain scalability solution.
 # Bonus Features
 - Login with UPort
