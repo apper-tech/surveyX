@@ -5,6 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
 import PlusOneIcon from '@material-ui/icons/PlusOne';
 import PeopleIcon from '@material-ui/icons/People';
+import MoneyIcon from '@material-ui/icons/AttachMoney';
 import DoneAllIcon from '@material-ui/icons/DoneAll'
 import Button from '@material-ui/core/Button';
 import '../App.css';
@@ -39,6 +40,16 @@ export const mainListItems = (
             <PeopleIcon />
           </ListItemIcon>
           <ListItemText primary="Participation" />
+        </ListItem>
+      </Button>
+    </div>
+    <div>
+      <Button variant="text" color="primary" href={prefix + "claim"}>
+        <ListItem button>
+          <ListItemIcon>
+            <MoneyIcon />
+          </ListItemIcon>
+          <ListItemText primary="claim prize" />
         </ListItem>
       </Button>
     </div>

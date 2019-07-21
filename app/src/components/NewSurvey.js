@@ -9,6 +9,7 @@ import Code from '@material-ui/icons/Code';
 import Filter1 from '@material-ui/icons/Filter1';
 import Filter2 from '@material-ui/icons/Filter2';
 import Filter3 from '@material-ui/icons/Filter3';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import Fab from '@material-ui/core/Fab';
 import NavigationIcon from '@material-ui/icons/Navigation';
 import helpers from '../_helpers/helpers'
@@ -19,14 +20,14 @@ import 'react-circular-progressbar/dist/styles.css';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import Done from '@material-ui/icons/Done';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
 import CardActions from '@material-ui/core/CardActions';
 import GenerateRandomCode from 'react-random-code-generator';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import { ReactComponent as Logo } from '../ETH-512.svg';
 
 import ListItemText from '@material-ui/core/ListItemText';
 const styles = theme => ({
@@ -34,36 +35,43 @@ const styles = theme => ({
     display: 'inline',
     color: 'red'
   },
+  logo: {
+    width: '45px',
+    height: '50px'
+  }
 });
 class NewSurvey extends React.Component {
 
   state = {
     loading: true, drizzleState: null,
+    survey: null,
     title: '',
     address: '',
     description: '',
     option1: '',
     option2: '',
     option3: '',
+    prizeEth: 0,
     surveyDate: '',
     surveyCode: '',
     hasSurvey: false,
     surveyAdded: false,
     progressVisible: false,
     receipt: '',
-    timeToRedirect: 5000,
+    timeToRedirect: 115000,
     unsubscribe: '',
     formErrors: []
   };
 
   componentDidMount() {
     const { drizzle } = this.props;
+
     helpers.initDrizzle(drizzle).then((state) => {
       SurveryHandler.CheckSurveyExsist(this.props.drizzle,
         state.drizzleState.accounts[0])
         .then((hasSurvey) => {
           if (hasSurvey)
-            this.setState({ loading: false, hasSurvey: true });
+            this.setState({ loading: false, hasSurvey: false });
           else {
             state.address = state.drizzleState.accounts[0];
             state.surveyCode = GenerateRandomCode.TextNumCode(5, 3);
@@ -93,6 +101,9 @@ class NewSurvey extends React.Component {
     if (!(this.state.option3 && this.state.option3.length > 0)) {
       errors.push("Third Option Can't be Empty");
     }
+    if (!(this.state.prizeEth && this.state.prizeEth > 0)) {
+      errors.push("Prize Value Can't be Empty");
+    }
     if (errors.length > 0) {
       this.setState({ formErrors: errors });
       return false;
@@ -103,8 +114,9 @@ class NewSurvey extends React.Component {
   }
   handleClick = event => {
     if (this.checkForm()) {
-      this.setState({ progressVisible: true, formErrors: [] });
-      handler.AddSurvey(this.props.drizzle, this.state).then((receipt) => {
+      this.setState({ progressVisible: false, formErrors: [] });
+      handler.AddSurvey(this.props.drizzle, this.state).then((data) => {
+        const { receipt, survey } = data;
         this.setState({
           surveyAdded: receipt.status,
           receipt:
@@ -112,12 +124,28 @@ class NewSurvey extends React.Component {
             gasUsed: receipt.gasUsed,
             TransHash: receipt.transactionHash
           },
-          progressVisible: false
+          progressVisible: false,
+          survey: survey
         });
+        console.log('cool');
+
+        // this.sendFile(this.state.survey, "signature");
       });
     }
 
   };
+  sendFile(exportObj, exportName) {
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", exportName + ".json");
+    document.body.appendChild(downloadAnchorNode); // required for firefox
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  }
+  handleClickDown = event => {
+    this.sendFile(this.state.survey, "Signature");
+  }
   navigateHome(classes) {
     const renderer = ({ hours, minutes, seconds, completed }) => {
       if (completed) {
@@ -139,9 +167,12 @@ class NewSurvey extends React.Component {
                 </div>
               }
               action={
-                <IconButton>
-                  <Done />
-                </IconButton>
+                <Fab variant="extended" aria-label="Delete" className={classes.fab}
+                  onClick={this.handleClickDown}
+                >
+                  <ArrowDownward className={classes.extendedIcon} />
+                  Download
+              </Fab>
               }
               title="Survey Created!"
               subheader={new Date(Date.now()).toLocaleString()}
@@ -155,11 +186,11 @@ class NewSurvey extends React.Component {
               </Typography>
               <CardActions className={classes.actions} disableActionSpacing>
                 <Typography component="i" color="textSecondary" >
-                  Redirecting to Home Page click to procced
+                  Please Download your signature for safe keeping
                 </Typography>
               </CardActions>
             </CardContent>
-          </Card>
+          </Card >
         )
       }
     };
@@ -263,18 +294,33 @@ class NewSurvey extends React.Component {
             />
           </Grid>
           <Grid item>
+            <Logo className={classes.logo} />
+          </Grid>
+          <Grid item>
+            <TextField
+              className={classes.textField}
+              fullWidth
+              helperText="Enter the Winning Bet for the survey!"
+              type="number"
+              InputProps={{
+                startAdornment: <InputAdornment position="start">ETH</InputAdornment>,
+              }}
+              onChange={(e) => { this.setState({ prizeEth: e.target.value }) }}
+              id="input-with-icon-grid" label="Prize in ETH" />
+          </Grid>
+          <Grid item>
             <LinearProgress color="secondary" hidden={!this.state.progressVisible} />
-            <div hidden={this.state.formErrors.length == 0}>
+            <div hidden={Number(this.state.formErrors.length) === 0}>
               <List dense={true} >
                 {
                   this.state.formErrors.map((txt, i) => {
                     return (
-                    <ListItem key={i}>
-                      <ListItemText className={classes.listItemError}
-                        primary={txt}
-                        disableTypography={true}
-                      />
-                    </ListItem>)
+                      <ListItem key={i}>
+                        <ListItemText className={classes.listItemError}
+                          primary={txt}
+                          disableTypography={true}
+                        />
+                      </ListItem>)
                   })
                 }
 

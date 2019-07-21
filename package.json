@@ -1,5 +1,5 @@
 {
-    "name": "surveyX",
+    "name": "surveyx",
     "version": "0.2.0",
     "private": true,
     "dependencies": {
@@ -9,9 +9,10 @@
         "truffle-hdwallet-provider": "^1.0.0-web3one.5"
     },
     "scripts": {
+        "ganache": "ganache-cli -m \"region throw mosquito mirror toe capable force record include thunder typical smooth\"",
         "compile": "truffle compile",
         "migrate": "truffle migrate ",
-        "m-rinkeby": "truffle migrate -f 2 --network rinkeby --verbose-rpc --interactive --reset",
+        "m-rinkeby": "truffle migrate -f 2 --network rinkeby",
         "m-ropsten": "truffle migrate -f 2 --network ropsten"
     }
 }

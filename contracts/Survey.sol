@@ -1,140 +1,129 @@
-pragma solidity ^0.5.0;
-pragma experimental ABIEncoderV2;
+pragma solidity >=0.4.21 <0.6.0;
+import './Signature.sol';
 
 contract Survey {
-  
-  struct SurveyData {
-    uint surveyId;
-    string title;
-    string description;
-    string[3] options;
-    uint256 creationDate;
-    string code;
-    uint participantCount;
-  }
-  struct participantData {
-    address surveyAddress;
-    uint selectedOption;
-  }
-  mapping(address => SurveyData) public surveys;
-  mapping (uint => address) surveysIndex;
-  mapping(address => participantData) public participants;
-  mapping (uint => address) participantsIndex;
-  mapping (address=>uint) public deposits;
-  uint public surveyCount;
-  uint public participantsCount;
+   address public signatureAddress;
+    constructor (address _addr) public {
+        signatureAddress = _addr;
+    }
 
-  constructor() public {
+  struct SurveyStruct {
+    string Id;
+    address owner;
+    bytes32 sHash;
+    bool done;
   }
-  function addSurvey (
-    string memory _title,
-    string memory _desc,
-    address _owner,
-    string memory option1,
-    string memory option2,
-    string memory option3,
-    string memory _code) public returns(bool)  {
-    require(bytes(_title).length > 0,"Title Can't be Empty!");
-    require(bytes(_desc).length > 0,"Please add a description");
-    surveyCount++;
-    string[3] memory options = [option1,option2,option3];
-    surveys[_owner] = SurveyData(surveyCount, _title, _desc,options ,now,_code, 0);
-    surveysIndex[surveyCount] = _owner;
-    return true;
+  struct ParticipantStruct {
+    string Id;
+    string SId;
+    address owner;
   }
-  function surveyExsist(address _owner)public view returns(bool){
-    if(surveys[_owner].surveyId > 0) {
-      return true;
+  struct ClaimStruct {
+    string SId;
+    address winner;
+    uint prize;
+  }
+
+  mapping(address => SurveyStruct) public surveyStruct;
+  address[] public surveyList;
+
+  mapping(address => ParticipantStruct) public participantStruct;
+  address[] public participantList;
+
+  mapping(uint => ClaimStruct) public claimStruct;
+  uint public claimCount;
+
+  address[] Claimed;
+
+  function addSurvey(string memory _id,address _owner,string memory _data) public payable returns(bool) {
+    require(!compare(_id, ""),'Id Too Small');
+     surveyList.push(_owner);
+     surveyStruct[_owner].Id = _id;
+     surveyStruct[_owner].owner = _owner;
+     surveyStruct[_owner].sHash = keccak256(abi.encodePacked(_data));
+     surveyStruct[_owner].done = false;
+     return true;
+  }
+  function endSurvey(string memory _id,address _winner,uint _prize) public returns(bool) {
+     for (uint i = 0; i < surveyList.length; i++) {
+          if(compare(_id, surveyStruct[surveyList[i]].Id))
+           {
+            surveyStruct[surveyList[i]].done = true;
+            claimStruct[claimCount].SId = _id;
+            claimStruct[claimCount].winner = _winner;
+            claimStruct[claimCount].prize = _prize;
+             return true;
+           }
     }
     return false;
   }
-  function castVote(uint option,string memory _code) public returns(string memory) {
-    address addr = getSurveyAddressByCode(_code);
-    if( addr == address(0)) {
-      return "no address";
+  function cancelSurvey(address _owner) public returns(bool) {
+     for (uint i = 0; i < surveyList.length; i++) {
+          if(surveyStruct[surveyList[i]].owner == _owner)
+           {
+             delete(surveyStruct[surveyList[i]]);
+             delete(surveyList[i]);
+             return true;
+           }
     }
-    participants[msg.sender] = participantData(addr,option);
-    participantsCount++;
-    participantsIndex[participantsCount] = msg.sender;
-    surveys[addr].participantCount++;
-    return "done";
+    return false;
   }
-  function getSurveyByAddress(address _owner) public view 
-  returns(
-    string memory,
-    string memory,
-    string memory,
-    string memory,
-    string memory,
-    uint,
-    uint256,
-    string memory,
-    uint
-    ) {
-    SurveyData memory survey = surveys[_owner];
-    return (
-      survey.title,
-      survey.description,
-      survey.options[0],
-      survey.options[1],
-      survey.options[2],
-      survey.surveyId,
-      survey.creationDate,
-      survey.code,
-      survey.participantCount);
-  }
-  function compareStrings (bytes memory a, bytes memory b) internal pure returns (bool) {
-    return keccak256(a) == keccak256(b);
-  }
-
-  function getSurveyAddressByCode(string memory _code) public view returns(address) 
-  {
-    for (uint index = 1; index <= surveyCount; index++) {
-      address surveyAddress = surveysIndex[index];
-      if(compareStrings(bytes(_code),bytes(surveys[surveyAddress].code))) {
-        return surveyAddress;
+  function claimPrize(address _winner,bytes32 msgHash, uint8 v, bytes32 r, bytes32 s) public returns(bool) {
+    Signature instanceSignature = Signature(signatureAddress);
+    address addr = instanceSignature.verifySign(_winner,msgHash,v,r,s);
+    if(addr == _winner)
+    {
+      for (uint i = 0; i < claimCount;i++) {
+       if(claimStruct[i].winner == _winner)
+       {
+        if(address(this).balance < claimStruct[i].prize) revert('no enough coin');
+        msg.sender.transfer(claimStruct[i].prize);
+        Claimed.push(_winner);
+        return true;
+       }
       }
     }
+    return false;
   }
-  function getSurveyResultsByCode(string memory _code) public view returns(uint,uint,uint) 
-  {
-    uint op1;
-    uint op2;
-    uint op3;
-    address surveyAddress = getSurveyAddressByCode(_code);
-    for (uint index = 1; index <= participantsCount; index++) {
-      address partAddress = participantsIndex[index];
-      if(participants[partAddress].surveyAddress == surveyAddress) {
-        if(participants[partAddress].selectedOption == 1 ) {
-          op1++;
-        }
-        if(participants[partAddress].selectedOption == 2 ) {
-          op2++;
-        }
-        if(participants[partAddress].selectedOption == 3 ) {
-          op3++;
-        }
-      }
+  function checkPrize() public view returns(address[] memory) {
+    return Claimed;
+  }
+  function getBalance() public view returns(uint256) {
+    return address(this).balance;
+  }
+  function addParticipation(string memory _id,string memory _sid,address _owner) public returns(bool) {
+    require(!compare(_id, ""),'Id Too Small');
+    require(!compare(_sid, ""),'SId Too Small');
+     participantList.push(_owner);
+     participantStruct[_owner].Id = _id;
+     participantStruct[_owner].SId = _sid;
+     participantStruct[_owner].owner = _owner;
+     return true;
+  }
+  function compare(string memory first,string memory second) private pure returns(bool)  {
+    return keccak256(abi.encodePacked(first)) == keccak256(abi.encodePacked(second));
+  }
+  function surveyExsist(address _owner) public view returns(bool){
+   if(surveyStruct[_owner].owner == _owner && !surveyStruct[_owner].done)
+     return true;
+    return false;
+  }
+  function getSurveyByAddress(address _owner) public view returns (string memory) {
+     for (uint i = 0; i < surveyList.length; i++) {
+            if(surveyList[i] == _owner)
+            {
+              if(!surveyStruct[_owner].done)
+               return surveyStruct[surveyList[i]].Id;
+            else
+               return "done";
+            }
     }
-    return (op1,op2,op3);
   }
-  function getSurveyWinnerCode(string memory _code,uint rand) public returns(address) 
-  {
-    address surveyAddress = getSurveyAddressByCode(_code);
-    for (uint index = 1; index <= participantsCount; index++) {
-      address partAddress = participantsIndex[index];
-      if(participants[partAddress].surveyAddress == surveyAddress) {
-        if(index == rand ) {
-          delete(surveys[surveyAddress]);
-          return partAddress;
-        }
-      }
+  function getparticipantByAddress(address _owner) public view returns (string memory,string memory) {
+     for (uint i = 0; i < participantList.length; i++) {
+            if(participantList[i] == _owner)
+            return (participantStruct[participantList[i]].Id,
+                    participantStruct[participantList[i]].SId);
     }
-  }
-  function cancelSurveyByCode(string memory _code) public returns(bool) 
-  {
-    address surveyAddress = getSurveyAddressByCode(_code);
-    delete(surveys[surveyAddress]);
-    return true;
   }
 }

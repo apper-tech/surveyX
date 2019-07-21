@@ -4,6 +4,7 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import NewSurvey from './components/NewSurvey';
 import OwnerSurveys from './components/OwnerSurveys';
 import Participate from './components/Participate';
+import Claim from './components/Claim';
 import TestNetCheck from './components/TestNetCheck';
 
 import Dashboard from './_layout/Dashboard';
@@ -44,6 +45,10 @@ export default function Routes(drizzle) {
                 <Route path='/participate' render={() =>
                     (<Wrapper>
                         <Participate drizzle={drizzle} />
+                    </Wrapper>)} />
+                <Route path='/claim' render={() =>
+                    (<Wrapper>
+                        <Claim drizzle={drizzle} />
                     </Wrapper>)} />
             </Switch>
         </HashRouter>

@@ -139,6 +139,74 @@ const ParticipateLayoutStyles = theme => ({
     border: 'solid 1px green'
   }
 });
+const ClaimLayoutStyles = theme => ({
+  root: {
+    width: '100%',
+    maxWidth: 360,
+    backgroundColor: theme.palette.background.paper,
+  },
+  dropzone: {
+    height: '50px'
+  },
+  listItemError: {
+    display: 'inline',
+    color: 'red'
+  },
+  main: {
+    width: 'auto',
+    display: 'block', // Fix IE 11 issue.
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+      width: 400,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+  },
+  paper: {
+    marginTop: theme.spacing.unit * 8,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+  },
+  footer: {
+    marginTop: theme.spacing.unit * 2,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
+  avatar: {
+    margin: theme.spacing.unit,
+    backgroundColor: theme.palette.secondary.main,
+  },
+  headerIcon: {
+    margin: theme.spacing.unit,
+    backgroundColor: theme.palette.primary.main,
+  },
+  form: {
+    width: '100%', // Fix IE 11 issue.
+    marginTop: theme.spacing.unit,
+  },
+  submit: {
+    marginTop: theme.spacing.unit * 3,
+  },
+  fab: {
+    marginTop: theme.spacing.unit * 2,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  actions: {
+    alignItems: 'center',
+    align: 'center',
+    fontSize: '20px'
+  },
+  active: {
+    backgroundColor: 'rgba(13, 189, 13, 0.45)',
+    border: 'solid 1px green'
+  }
+});
 const HomeStyles = theme => ({
   appBar: {
     position: 'relative',
@@ -189,5 +257,6 @@ const HomeStyles = theme => ({
 export {
   DashboardStyles,
   HomeStyles,
-  ParticipateLayoutStyles
+  ParticipateLayoutStyles,
+  ClaimLayoutStyles
 }

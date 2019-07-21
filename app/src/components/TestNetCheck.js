@@ -28,12 +28,19 @@ class TestNetCheck extends React.Component {
             if (networks.some(v => v === 'rinkeby')) {
                 dNet.push({ id: 4, title: 'Rinkeby', subtitle: 'Rinkeby Testnet', body: 'TESTNET Rinkeby (ETH) Blockchain' });
             }
+            if (networks.some(v => v === 'ganache')) {
+                dNet.push({ id: 99, title: 'Ganache', subtitle: 'Ganache Local Testnet', body: 'TESTNET Ganache (ETH) Blockchain' });
+            }
+
+
             this.setState({ networks: dNet });
         })
     }
     async checkWeb3(drizzle) {
         drizzle.web3.eth.net.getNetworkType().then(networkName => {
-            this.setState({ currentNetwork: networkName });
+            if (networkName === 'private')
+                this.setState({ currentNetwork: 'ganache' });
+            else this.setState({ currentNetwork: networkName });
         });
     }
     render() {

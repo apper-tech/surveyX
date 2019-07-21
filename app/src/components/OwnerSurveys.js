@@ -37,6 +37,7 @@ import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import ArrowDownward from '@material-ui/icons/ArrowDownward';
 
 const styles = theme => ({
     root: {
@@ -111,6 +112,8 @@ class OwnerSurveys extends React.Component {
                         SurveryHandler.GetSurveyList(this.props.drizzle,
                             state.drizzleState.accounts[0])
                             .then((data) => {
+                                console.log(data);
+
                                 this.setState({ rows: data, hasData: true, loading: false });
                             }).then(() => {
                                 this.forceUpdate();
@@ -123,13 +126,38 @@ class OwnerSurveys extends React.Component {
                 })
         });
     }
+    /* let survey = {
+        title: title,
+        description: description,
+        address: address,
+        option1: option1,
+        option2: option2,
+        option3: option3,
+        surveyCode: surveyCode,
+        prizeEth: prizeEth
+    } */
     createData(creationDate, numOfUsers) {
         id += 1;
         return { id, creationDate, numOfUsers };
     }
-    checkParticipantsCount(rows) {
-        const count = rows[9] + rows[10] + rows[11];
-        return count == 0;
+    getParticipantsCount(rows) {
+        let o1 = 0, o2 = 0, o3 = 0;
+        rows.forEach(element => {
+            switch (element.selectedOption) {
+                case 1:
+                    o1++;
+                    break;
+                case 2:
+                    o2++;
+                    break;
+                case 3:
+                    o3++;
+                    break;
+                default:
+                    break;
+            }
+        });
+        return { o1, o2, o3 };
     }
     handleClickOpen = () => {
         this.setState({ open: true });
@@ -213,36 +241,77 @@ class OwnerSurveys extends React.Component {
         );
     }
     RenderResult(value, option, classes) {
-        return (<CircularProgressbar
-            percentage={value}
-            text={`${value}`}
-            background
-            backgroundPadding={6}
-            className={classes.result}
-        />);
+        const { o1, o2, o3 } = this.getParticipantsCount(value);
+        switch (option) {
+            case 1:
+                return (<CircularProgressbar
+                    percentage={o1}
+                    text={`${o1}`}
+                    background
+                    backgroundPadding={6}
+                    className={classes.result}
+                />);
+
+            case 2:
+                return (<CircularProgressbar
+                    percentage={o2}
+                    text={`${o2}`}
+                    background
+                    backgroundPadding={6}
+                    className={classes.result}
+                />);
+
+            case 3:
+                return (<CircularProgressbar
+                    percentage={o3}
+                    text={`${o3}`}
+                    background
+                    backgroundPadding={6}
+                    className={classes.result}
+                />);
+
+            default:
+                break;
+        }
+
     }
-    handleDone(part, code) {
-        if (part > 0) {
+    handleDone(rows) {
+        if (rows.participants.length > 0) {
             SurveryHandler.GetWinnerAddress(this.props.drizzle,
-                code, part)
+                rows)
                 .then((address) => {
                     this.setState({ winner: address, winnnerFetched: true });
                     this.forceUpdate();
                 });
         }
     }
-    handleCancel(code) {
+    handleCancel(rows) {
         this.setState({ connecting: true });
 
-        SurveryHandler.CancelSurveyByCode(this.props.drizzle, code)
+        SurveryHandler.CancelSurvey(this.props.drizzle, rows.address)
             .then((canceled) => {
                 this.setState({ connecting: false, surveryCanceled: true });
             })
 
     }
+    sendFile(exportObj, exportName) {
+        var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+        var downloadAnchorNode = document.createElement('a');
+        downloadAnchorNode.setAttribute("href", dataStr);
+        downloadAnchorNode.setAttribute("download", exportName + ".json");
+        document.body.appendChild(downloadAnchorNode); // required for firefox
+        downloadAnchorNode.click();
+        downloadAnchorNode.remove();
+    }
+    handleClickDown = event => {
+        let survey = this.state.rows;
+        delete (survey['participants']);
+        delete (survey['_id']);
+        this.sendFile(this.state.rows, "Signature");
+    }
     OwnerSurveysTable(classes, results) {
         const Timestamp = require('react-timestamp');
-        const surveyLink = '/surveyX/#/' + "participate/" + this.state.rows[7];
+        const surveyLink = `/surveyX/#/participate/${this.state.rows.surveyCode}`;
         return (
             <div>
                 <Grid container spacing={40} className={classes.cardGrid}>
@@ -252,11 +321,11 @@ class OwnerSurveys extends React.Component {
                                 <CardContent>
                                     <Typography component="h1" variant="h5">
                                         <Typography color="textSecondary"> {'\t'} Title</Typography>
-                                        {this.state.rows[0]}
+                                        {this.state.rows.title}
                                     </Typography>
                                     <Typography component="h1" variant="h5">
                                         <Typography color="textSecondary">{'\t'}  Description</Typography>
-                                        {this.state.rows[1]}
+                                        {this.state.rows.description}
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
@@ -265,9 +334,10 @@ class OwnerSurveys extends React.Component {
                                         fullWidth
                                         variant="contained"
                                         color="primary"
-                                        disabled={this.checkParticipantsCount(this.state.rows)}
+                                        disabled={this.state.rows.participants.length == 0}
                                         className={classes.submit}
-                                        onClick={() => this.handleDone(this.state.rows[8], this.state.rows[7])}>
+                                        onClick={() => this.handleDone(this.state.rows)}
+                                    >
                                         End Survey
                                     </Button>
                                     <Button
@@ -276,10 +346,21 @@ class OwnerSurveys extends React.Component {
                                         variant="contained"
                                         color="secondary"
                                         className={classes.submit}
-                                        onClick={() => this.handleCancel(this.state.rows[7])}>
+                                        onClick={() => this.handleCancel(this.state.rows)}
+                                    >
                                         Cancel Survey
                                     </Button>
-
+                                    <Button
+                                        type="submit"
+                                        fullWidth
+                                        variant="outlined"
+                                        color="primary"
+                                        className={classes.submit}
+                                        onClick={() => this.handleClickDown()}
+                                    >
+                                        <ArrowDownward className={classes.extendedIcon} />
+                                        Download
+                                    </Button>
                                 </CardActions>
                             </div>
                             <CardMedia
@@ -296,24 +377,24 @@ class OwnerSurveys extends React.Component {
                             <List dense={false}>
                                 <ListItem>
                                     <ListItemText
-                                        primary={this.state.rows[2]}
+                                        primary={this.state.rows.option1}
                                         secondary="First Option"
                                     />
-                                    <div>{this.state.rows ? this.RenderResult(this.state.rows[9], 0, classes) : "fool"}</div>
+                                    <div>{this.state.rows ? this.RenderResult(this.state.rows.participants, 1, classes) : "fool"}</div>
                                 </ListItem>
                                 <ListItem>
                                     <ListItemText
-                                        primary={this.state.rows[3]}
+                                        primary={this.state.rows.option2}
                                         secondary="Second Option"
                                     />
-                                    <div>{this.state.rows ? this.RenderResult(this.state.rows[10], 0, classes) : "fool"}</div>
+                                    <div>{this.state.rows ? this.RenderResult(this.state.rows.participants, 2, classes) : "fool"}</div>
                                 </ListItem>
                                 <ListItem>
                                     <ListItemText
-                                        primary={this.state.rows[4]}
+                                        primary={this.state.rows.option3}
                                         secondary="Third Option"
                                     />
-                                    <div>{this.state.rows ? this.RenderResult(this.state.rows[11], 0, classes) : "fool"}</div>
+                                    <div>{this.state.rows ? this.RenderResult(this.state.rows.participants, 3, classes) : "fool"}</div>
                                 </ListItem>
                             </List>
                         </Paper>
@@ -327,7 +408,7 @@ class OwnerSurveys extends React.Component {
                                     <Grid container>
                                         <Grid item> #ID:
                                             <Typography variant="subtitle1" color="textSecondary">
-                                                {this.state.rows[7]}
+                                                {this.state.rows.surveyCode}
                                             </Typography>
                                         </Grid>
                                         <Grid item> <BottomNavigationAction label="Share" onClick={this.handleClickOpen} icon={<ShareIcon />} /></Grid>
@@ -343,7 +424,7 @@ class OwnerSurveys extends React.Component {
                                             <Grid container spacing={8}>
                                                 <Grid item>  Please Share This Link:
                                                     <Typography>
-                                                        <Link href={surveyLink}>{this.state.rows[7]}</Link>
+                                                        <Link href={surveyLink}>{this.state.rows.surveyCode}</Link>
                                                     </Typography>
                                                 </Grid>
                                                 <Grid item>
@@ -363,11 +444,11 @@ class OwnerSurveys extends React.Component {
                                 </TableCell>
                                 <TableCell align="left">Creation Date:
                                     <Typography variant="subtitle1" color="textSecondary">
-                                        <Timestamp time={this.state.rows[6]} />
+                                        <Timestamp date={this.state.rows.creationDate} />
                                     </Typography></TableCell>
                                 <TableCell align="left">Participants:
                                 <Typography variant="subtitle1" color="textSecondary">
-                                        {this.state.rows[8]}
+                                        {this.state.rows.participants.length}
                                     </Typography></TableCell>
                             </TableRow>
                         </TableHead>
