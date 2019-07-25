@@ -1,17 +1,33 @@
 {
-    "name": "surveyX",
-    "version": "0.2.0",
-    "private": true,
-    "dependencies": {
-        "any-promise": "^1.3.0",
-        "bindings": "^1.5.0",
-        "dotenv": "^7.0.0",
-        "truffle-hdwallet-provider": "^1.0.0-web3one.5"
-    },
-    "scripts": {
-        "compile": "truffle compile",
-        "migrate": "truffle migrate ",
-        "m-rinkeby": "truffle migrate -f 2 --network rinkeby --verbose-rpc --interactive --reset",
-        "m-ropsten": "truffle migrate -f 2 --network ropsten"
-    }
+  "name": "surveyx",
+  "version": "1.0.0",
+  "description": "Crowd Opinion Mining and Rewarding DApp",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test.js"
+  },
+  "dependencies": {
+    "ejs": "^2.5.6",
+    "express": "^4.15.2"
+  },
+  "devDependencies": {
+    "request": "^2.81.0",
+    "tape": "^4.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apper-tech/surveyX.git"
+  },
+  "keywords": [
+    "survey",
+    "nodejs",
+    "mongodb"
+  ],
+  "author": "MhMazen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apper-tech/surveyX/issues"
+  },
+  "homepage": "https://github.com/apper-tech/surveyX#readme"
 }

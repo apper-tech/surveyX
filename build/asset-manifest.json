@@ -1,0 +1,19 @@
+{
+  "main.css": "/surveyX/static/css/main.8cc8c2c6.chunk.css",
+  "main.js": "/surveyX/static/js/main.2149ac4b.chunk.js",
+  "main.js.map": "/surveyX/static/js/main.2149ac4b.chunk.js.map",
+  "runtime~main.js": "/surveyX/static/js/runtime~main.b685982d.js",
+  "runtime~main.js.map": "/surveyX/static/js/runtime~main.b685982d.js.map",
+  "static/css/2.c5dce222.chunk.css": "/surveyX/static/css/2.c5dce222.chunk.css",
+  "static/js/2.35e458ad.chunk.js": "/surveyX/static/js/2.35e458ad.chunk.js",
+  "static/js/2.35e458ad.chunk.js.map": "/surveyX/static/js/2.35e458ad.chunk.js.map",
+  "index.html": "/surveyX/index.html",
+  "precache-manifest.b24169c2331434525188c24c76b9cd9f.js": "/surveyX/precache-manifest.b24169c2331434525188c24c76b9cd9f.js",
+  "service-worker.js": "/surveyX/service-worker.js",
+  "static/css/2.c5dce222.chunk.css.map": "/surveyX/static/css/2.c5dce222.chunk.css.map",
+  "static/css/main.8cc8c2c6.chunk.css.map": "/surveyX/static/css/main.8cc8c2c6.chunk.css.map",
+  "static/media/ETH-512.6ebf6cf6.svg": "/surveyX/static/media/ETH-512.6ebf6cf6.svg",
+  "static/media/logo.png": "/surveyX/static/media/logo.2f6eb2eb.png",
+  "static/media/index.css": "/surveyX/static/media/roboto-latin-900italic.bc833e72.woff",
+  "static/media/survey.svg": "/surveyX/static/media/survey.1341f506.svg"
+}
