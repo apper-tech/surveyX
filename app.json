@@ -1,0 +1,16 @@
+{
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ],
+  "env": {
+  },
+  "formation": {
+  },
+  "name": "surveyX",
+  "scripts": {
+  },
+  "stack": "heroku-18"
+}
