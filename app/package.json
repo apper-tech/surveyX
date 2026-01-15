@@ -18,7 +18,7 @@
     "react-random-code-generator": "^1.0.2",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.5",
+    "react-scripts": "5.0.1",
     "react-step-progress-bar": "^1.0.3",
     "react-timestamp": "^4.4.0",
     "recharts": "^1.4.3",
